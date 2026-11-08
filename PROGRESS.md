@@ -61,6 +61,7 @@ Updated: 2026-11-08
 - [ ] Android build and device verification; Gradle 9.3.1 is not cached locally.
 - [ ] Performance review.
 - [x] First GitHub Pages deployment is live at https://qosaigm.github.io/StudyBridge/; Actions run 42524699137 succeeded.
+- [x] Protected routes refresh on Supabase auth-state changes; updated web deployment succeeded in Actions run 42526008145.
 - [x] Secure app-wide admin role table/helper and a private verified-email grant template, separate from study-space owner/member roles.
 
 ## Configuration and known issues
