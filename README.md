@@ -50,7 +50,9 @@ The app-wide admin role is stored separately from private study-space owner/memb
 
 ## GitHub Pages deployment
 
-The `.github/workflows/deploy-pages.yml` workflow builds the Flutter web release and publishes it to GitHub Pages on pushes to `main`. Before the first deployment, add repository Actions secrets named `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, then set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. The workflow calculates the correct web base path for a repository site and leaves URL routing on Flutter's default hash strategy.
+The `.github/workflows/deploy-pages.yml` workflow builds the Flutter web release and publishes it to GitHub Pages on pushes to `main`.
+
+Live website: [StudyBridge](https://qosaigm.github.io/StudyBridge/).`r`n`r`nFor a fresh deployment, add repository Actions secrets named `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`, then set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**. The workflow calculates the correct web base path for a repository site and leaves URL routing on Flutter's default hash strategy.
 
 ## Private voice rooms (Phase 4)
 

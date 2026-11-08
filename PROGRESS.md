@@ -60,7 +60,7 @@ Updated: 2026-11-08
 - [x] GitHub Pages build/deployment workflow and dependency update schedule prepared.
 - [ ] Android build and device verification; Gradle 9.3.1 is not cached locally.
 - [ ] Performance review.
-- [ ] First GitHub Pages deployment; no GitHub remote is configured.
+- [x] First GitHub Pages deployment is live at https://qosaigm.github.io/StudyBridge/; Actions run 42524699137 succeeded.
 - [x] Secure app-wide admin role table/helper and a private verified-email grant template, separate from study-space owner/member roles.
 
 ## Configuration and known issues
