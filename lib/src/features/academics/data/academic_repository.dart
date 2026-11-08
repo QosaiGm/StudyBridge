@@ -3,6 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 final academicRepositoryProvider = Provider<AcademicRepository>((ref) => AcademicRepository(Supabase.instance.client));
 final academicDataProvider = FutureProvider<AcademicData>((ref) => ref.watch(academicRepositoryProvider).load());
+final homeAcademicDataProvider = FutureProvider<AcademicData>(
+  (ref) => ref.watch(academicRepositoryProvider).loadForDashboard(),
+);
 
 class AcademicData {
   const AcademicData({required this.subjects, required this.lectures, required this.tasks, required this.sessions});
@@ -29,6 +32,37 @@ class AcademicRepository {
       lectures: List<Map<String, dynamic>>.from(results[1]),
       tasks: List<Map<String, dynamic>>.from(results[2]),
       sessions: List<Map<String, dynamic>>.from(results[3]),
+    );
+  }
+
+  Future<AcademicData> loadForDashboard() async {
+    final results = await Future.wait([
+      _client
+          .from('subjects')
+          .select('id,name')
+          .eq('user_id', _userId)
+          .order('name'),
+      _client
+          .from('lectures')
+          .select()
+          .eq('user_id', _userId)
+          .eq('is_completed', false)
+          .order('lecture_date')
+          .limit(3),
+      _client
+          .from('tasks')
+          .select()
+          .eq('user_id', _userId)
+          .eq('is_completed', false)
+          .order('due_at')
+          .limit(3),
+    ]);
+
+    return AcademicData(
+      subjects: List<Map<String, dynamic>>.from(results[0]),
+      lectures: List<Map<String, dynamic>>.from(results[1]),
+      tasks: List<Map<String, dynamic>>.from(results[2]),
+      sessions: const [],
     );
   }
 

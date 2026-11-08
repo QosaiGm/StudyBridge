@@ -12,7 +12,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final academic = ref.watch(academicDataProvider);
+    final academic = ref.watch(homeAcademicDataProvider);
     final metadata = Supabase.instance.client.auth.currentUser?.userMetadata;
     final name = (metadata?['display_name'] as String?)?.trim();
     final greeting = name == null || name.isEmpty ? 'أهلاً بك' : 'أهلاً، $name';
@@ -122,7 +122,7 @@ class HomeScreen extends ConsumerWidget {
                       _AcademicSummary(
                         academic: academic,
                         onOpen: () => context.go('/academics'),
-                        onRetry: () => ref.invalidate(academicDataProvider),
+                        onRetry: () => ref.invalidate(homeAcademicDataProvider),
                       ),
                       const SizedBox(height: 20),
                       const _PartnerCard(),

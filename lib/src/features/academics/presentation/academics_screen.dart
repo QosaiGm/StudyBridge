@@ -24,6 +24,7 @@ class _AcademicsScreenState extends ConsumerState<AcademicsScreen> {
 
   Future<void> _refresh() async {
     ref.invalidate(academicDataProvider);
+    ref.invalidate(homeAcademicDataProvider);
     await ref.read(academicDataProvider.future);
   }
 
