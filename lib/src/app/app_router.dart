@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,11 +15,13 @@ import '../features/insights/presentation/insights_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final hasSession =
-      SupabaseConfig.isConfigured &&
-      Supabase.instance.client.auth.currentSession != null;
-  return GoRouter(
-    initialLocation: hasSession ? '/home' : '/login',
+  final authRefresh = SupabaseConfig.isConfigured
+      ? _AuthStateRefresh(Supabase.instance.client.auth.onAuthStateChange)
+      : null;
+
+  final router = GoRouter(
+    refreshListenable: authRefresh,
+    initialLocation: _hasSession ? '/home' : '/login',
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const AuthScreen()),
       GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
@@ -39,17 +44,47 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ],
     redirect: (context, state) {
-      if (state.matchedLocation == '/') return hasSession ? '/home' : '/login';
-      if ((state.matchedLocation == '/home' ||
-              state.matchedLocation == '/academics' ||
-              state.matchedLocation == '/focus' ||
-              state.matchedLocation == '/study-space' ||
-              state.matchedLocation == '/insights' ||
-              state.matchedLocation == '/settings') &&
-          !hasSession)
-        return '/login';
-      if (state.matchedLocation == '/login' && hasSession) return '/home';
+      final signedIn = _hasSession;
+      final needsSession = {
+        '/home',
+        '/academics',
+        '/focus',
+        '/study-space',
+        '/insights',
+        '/settings',
+      }.contains(state.matchedLocation);
+
+      if (state.matchedLocation == '/') {
+        return signedIn ? '/home' : '/login';
+      }
+      if (needsSession && !signedIn) return '/login';
+      if (state.matchedLocation == '/login' && signedIn) return '/home';
       return null;
     },
   );
+
+  ref.onDispose(() {
+    router.dispose();
+    authRefresh?.dispose();
+  });
+
+  return router;
 });
+
+bool get _hasSession =>
+    SupabaseConfig.isConfigured &&
+    Supabase.instance.client.auth.currentSession != null;
+
+class _AuthStateRefresh extends ChangeNotifier {
+  _AuthStateRefresh(Stream<AuthState> authEvents) {
+    _subscription = authEvents.listen((_) => notifyListeners());
+  }
+
+  late final StreamSubscription<AuthState> _subscription;
+
+  @override
+  void dispose() {
+    unawaited(_subscription.cancel());
+    super.dispose();
+  }
+}
