@@ -39,7 +39,7 @@ class SettingsRepository {
   SettingsRepository(this._client);
   final SupabaseClient _client;
   String get _userId => _client.auth.currentUser!.id;
-  get currentUser => _client.auth.currentUser;
+  User? get currentUser => _client.auth.currentUser;
 
   Future<PersonalSettings> load() async {
     final results = await Future.wait([
@@ -60,9 +60,9 @@ class SettingsRepository {
           .maybeSingle(),
     ]);
     final user = _client.auth.currentUser;
-    final profile = results[0] as Map<String, dynamic>?;
-    final settings = results[1] as Map<String, dynamic>?;
-    final notifications = results[2] as Map<String, dynamic>?;
+    final profile = results[0];
+    final settings = results[1];
+    final notifications = results[2];
     return PersonalSettings(
       displayName:
           (profile?['display_name'] as String?) ??
