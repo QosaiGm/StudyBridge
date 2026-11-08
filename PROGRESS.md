@@ -17,6 +17,7 @@ Updated: 2026-11-08
 
 - [x] Private subjects, lectures, tasks, and planner tables with owner RLS.
 - [x] Supabase repository and Arabic create/edit/delete/complete flows.
+- [x] Home dashboard loads and displays incomplete lectures and tasks from Supabase.
 - [x] Supabase migration applied (owner confirmed).
 - [x] Flutter analysis, existing tests, and Web build.
 - [ ] Authenticated CRUD verification; direct API verification could not resolve Supabase DNS in this environment.
@@ -62,6 +63,7 @@ Updated: 2026-11-08
 - [ ] Performance review.
 - [x] First GitHub Pages deployment is live at https://qosaigm.github.io/StudyBridge/; Actions run 42524699137 succeeded.
 - [x] Protected routes refresh on Supabase auth-state changes; updated web deployment succeeded in Actions run 42526008145.
+- [x] Dashboard data fix deployed successfully in Actions run 42526721078.
 - [x] Secure app-wide admin role table/helper and a private verified-email grant template, separate from study-space owner/member roles.
 
 ## Configuration and known issues
